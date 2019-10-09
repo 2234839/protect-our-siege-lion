@@ -1,0 +1,1 @@
+declare const __static='公开资源的路径'

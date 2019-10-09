@@ -2,6 +2,7 @@
 
 ## Project setup
 ```
+vue add electron-builder
 yarn install
 ```
 
