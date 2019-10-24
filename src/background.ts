@@ -1,8 +1,9 @@
 'use strict'
-import { app, BrowserWindow, Menu, nativeImage, Notification, protocol, Tray } from 'electron';
+import { app, BrowserWindow, Menu, nativeImage, Notification, protocol, Tray, screen, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import { Log } from './util/log';
 import path from 'path';
+import { Event_Name } from './EventName';
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -13,27 +14,43 @@ let win: BrowserWindow | null
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow() {
-  win = new BrowserWindow({
-    width: 800, height: 600, webPreferences: {
-      nodeIntegration: true
+  let size = screen.getPrimaryDisplay().workAreaSize
 
-    }
+  win = new BrowserWindow({
+    width: size.width, height: size.height, webPreferences: {
+      nodeIntegration: true
+    }, frame: false
   })
+  win.hide()
+
+  win.setAlwaysOnTop(true)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
-
+  setTimeout(() => {
+    win!.show
+  }, 10000);
   win.on('closed', () => {
-    win = null
+    // win = null
+    logger.info("关闭窗口")
   })
 
+  setInterval(() => {
+    time = Date.now()
+    logger.info('打开窗口')
+    win!.show()
+    if (Date.now() - time > 1000 * 60) { /** 60秒没有点击 */
+      logger.info('60秒都没有点击，关闭此次提示')
+    }
+
+  }, interval_time)
 }
 
 // Quit when all windows are closed.
@@ -41,7 +58,7 @@ app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit()
+    // app.quit()
   }
 })
 
@@ -60,38 +77,21 @@ app.on('window-all-closed', () => {
 // Some APIs can only be used after this event occurs.
 const icon = nativeImage.createFromPath(path.join(__static, '/ico.jpg'))//app.ico是app目录下的ico文件
 /** 托盘图标 */
-let tray:Tray| null = null
+let tray: Tray | null = null
 const logger = new Log()
 let notification: Notification | null = null
-const interval_time=1000*60*20
+const interval_time = 1000 * 60 * 20
 let time = Date.now()
 app.on('ready', async () => {
   tray = new Tray(icon);
-  notification = new Notification({
-    title: "眺望远方",
-    body: "要注意保护视力",
-    icon,
-  })
-  tray.setToolTip('眺望助手')
-  tray.on('click',()=>{
-    if(tray === null) return;
-    tray.displayBalloon({
-      content:`还有 ${(interval_time-(Date.now() - time))/1000}s 后提醒`,icon,title:"眺望助手"
-    })
+  setInterval(() => {
+    if (tray === null) return;
+    tray.setToolTip(`还有 ${(interval_time - (Date.now() - time)) / 1000}s 后提醒`)
+  }, 1000)
+  tray.on('click', () => {
+    win!.show()
   })
   tray.setContextMenu(Menu.buildFromTemplate([
-    {
-      label: '设置',
-      click: function () { } //打开相应页面
-    },
-    {
-      label: '帮助',
-      click: function () { }
-    },
-    {
-      label: '关于',
-      click: function () { }
-    },
     {
       label: '退出',
       click: function () {
@@ -100,21 +100,6 @@ app.on('ready', async () => {
       }
     }
   ]));
-
-  logger.info('开始运行')
-  setInterval(() => {
-    time = Date.now()
-    logger.info('弹出提示')
-    const id = setInterval(() => {
-      if (notification === null) return;
-      notification.show()
-    }, 1000)
-    if (notification === null) return;
-    notification.once("click", function () {
-      clearInterval(id)
-      logger.info('点击提示')
-    })
-  }, interval_time)
 
 
   if (isDevelopment && !process.env.IS_TEST) {
@@ -129,9 +114,8 @@ app.on('ready', async () => {
     // } catch (e) {
     //   console.error('Vue Devtools failed to install:', e.toString())
     // }
-
   }
-  // createWindow()
+  createWindow()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -148,3 +132,10 @@ if (isDevelopment) {
     })
   }
 }
+
+/** 监听关闭 */
+ipcMain.addListener(Event_Name.main_hide_window, () => {
+  win!.hide()
+  logger.info("点击隐藏")
+
+})
