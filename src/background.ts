@@ -14,6 +14,8 @@ let win: BrowserWindow | null
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
 function createWindow() {
+  logger.info('开始运行')
+
   let size = screen.getPrimaryDisplay().workAreaSize
 
   win = new BrowserWindow({

@@ -2,9 +2,6 @@
   "name": "time",
   "version": "0.1.1",
   "private": true,
-  "licenses": [
-    "MIT"
-  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -31,5 +28,8 @@
     "typescript": "^3.4.3",
     "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10"
-  }
+  },
+  "licenses": [
+    "MIT"
+  ]
 }

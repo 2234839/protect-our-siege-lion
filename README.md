@@ -1,33 +1,14 @@
 # 保护我方工程师
 
+这是个一个用提醒用户活动的方式来保护工程师的一个软件
+
 ## 首先保护视力
 
-## Project setup
-测试推送测试推送
-```
-vue add electron-builder
+## 编译方式
+
+需要vue-cli 没有的话先装这个
+
+```bash
 yarn install
+yarn run electron:build
 ```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
