@@ -3,7 +3,7 @@
 ## 首先保护视力
 
 ## Project setup
-测试推送
+测试推送测试推送
 ```
 vue add electron-builder
 yarn install
