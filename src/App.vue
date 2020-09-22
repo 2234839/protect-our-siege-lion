@@ -2,7 +2,10 @@
   <div id="app">
     <img @click.right="hide" class="bg" src="https://shenzilong.cn/util/redirect_to_bing_daily_picture_address?" alt />
     <div v-show="countdown" class="c-center" :style="{ '--t': countdown }">
-      <div class="c-text">{{ countdown }}</div>
+      <div>
+        <div>编程防沉迷系统</div>
+        <div class="c-text">{{ countdown }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,16 +30,17 @@
     font-size: 6vw;
     background: rgba(123, 122, 122, 0.21);
     display: inline-table;
-    outline: rgba(255, 255, 255, 0.69) solid 0.3rem;
-    padding: 1vh 6vw;
+    outline: #ffffffb0 solid 0.3rem;
     width: 150px;
     backdrop-filter: blur(calc(1px * var(--t)));
 
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: calc(100% - calc(15% - 1% * var(--t)) * 2);
+    height: calc(100% - calc(15% - 1% * var(--t)) * 2);
+
     transition: all 0.3s;
 
     display: flex;

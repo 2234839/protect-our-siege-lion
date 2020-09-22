@@ -33,5 +33,12 @@
   },
   "licenses": [
     "MIT"
-  ]
+  ],
+  "build": {
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+
+    }
+  }
 }
