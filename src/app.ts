@@ -1,16 +1,36 @@
-import Vue from "vue";
-import { ipcRenderer } from 'electron';
-import { Event_Name } from './EventName';
+import { computed, defineComponent, ref } from "@vue/composition-api";
+import { ipcRenderer } from "electron";
+import { Event_Name } from "./EventName";
 
-let time=Date.now()
+export default defineComponent({
+  setup() {
+    const showTime = ref(Date.now());
+    const currentTime = ref(Date.now());
+    setInterval(() => {
+      currentTime.value = Date.now();
+    }, 26);
 
-export default Vue.extend({
-    methods: {
-        hide() {
-            if(Date.now()-time<500){
-                ipcRenderer.send(Event_Name.main_hide_window)
-            }
-            time = Date.now()
-        }
+    let old = Date.now();
+
+    function hide() {
+      if (Date.now() - old < 500) {
+        ipcRenderer.send(Event_Name.main_hide_window);
+      }
+      old = Date.now();
     }
+
+    const countdown = computed(() => {
+      const s = Math.floor((currentTime.value - showTime.value) / 1000);
+      const t = 15 - s;
+      if (t < 0) {
+        return 0;
+      }
+      return t;
+    });
+
+    ipcRenderer.on(Event_Name.main_show_window, () => {
+      showTime.value = Date.now();
+    });
+    return { hide, countdown };
+  },
 });

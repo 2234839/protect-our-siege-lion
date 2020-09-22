@@ -1,6 +1,6 @@
 {
-  "name": "time",
-  "version": "0.1.1",
+  "name": "protect_our_siege_lion",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -12,22 +12,24 @@
   },
   "main": "background.js",
   "dependencies": {
-    "core-js": "^2.6.5",
+    "@vue/composition-api": "^1.0.0-beta.14",
+    "core-js": "^2.6.11",
     "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "vue": "^2.6.10",
-    "vue-class-component": "^7.0.2",
-    "vue-property-decorator": "^8.1.0",
-    "vuex": "^3.0.1"
+    "sass-loader": "^8.0.2",
+    "vue": "^2.6.12",
+    "vue-class-component": "^7.2.6",
+    "vue-property-decorator": "^8.5.1",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-typescript": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
-    "electron": "^6.0.10",
-    "typescript": "^3.4.3",
-    "vue-cli-plugin-electron-builder": "^1.4.0",
-    "vue-template-compiler": "^2.6.10"
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-typescript": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
+    "electron": "^6.1.12",
+    "typescript": "^3.9.7",
+    "vue-cli-plugin-electron-builder": "^1.4.6",
+    "vue-template-compiler": "^2.6.12"
   },
   "licenses": [
     "MIT"
