@@ -17,31 +17,26 @@ protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: tru
 function createWindow() {
   logger.info("开始运行");
 
-  let size = screen.getPrimaryDisplay().workAreaSize;
-
-  if (isDevelopment) size = { width: 800, height: 600 };
-
   win = new BrowserWindow({
-    width: size.width,
-    height: size.height,
     webPreferences: {
       nodeIntegration: true,
     },
+    fullscreen: true,
     frame: isDevelopment,
   });
   win.hide();
 
   win.on("show", () => {
-    console.log("win show");
-
+    win.setFullScreen(true);
     win.webContents.send(Event_Name.main_show_window, "show");
+    if (!isDevelopment) {
+      /** 正式使用要一直在顶部 */
+      win.setAlwaysOnTop(true);
+    }
   });
 
   if (isDevelopment) {
     win.webContents.openDevTools();
-  } else {
-    /** 正式使用要一直在顶部 */
-    win.setAlwaysOnTop(true);
   }
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -72,32 +67,12 @@ app.on("window-all-closed", () => {
   }
 });
 
-// app.on('activate', () => {
-//   console.log(1111);
-
-//   // On macOS it's common to re-create a window in the app when the
-//   // dock icon is clicked and there are no other windows open.
-//   if (win === null) {
-//     createWindow()
-//   }
-// })
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-/** 设置托盘图片icon */
-const icon = nativeImage.createFromPath(path.join(__static, "/ico.jpg"));
-/** 托盘图标 */
-let tray: Tray | null = null;
-let notification: Notification | null = null;
-
 const interval_time = 1000 * 60 * 15;
 
 let time = Date.now();
 app.on("ready", async () => {
-  console.log("app [ready]");
-
-  tray = new Tray(icon);
+  /** 托盘图标 */
+  let tray = new Tray(nativeImage.createFromPath(path.join(__static, "/ico.jpg")));
 
   setInterval(() => {
     /** 更新剩余时间提示 */
