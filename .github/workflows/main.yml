@@ -29,10 +29,13 @@ jobs:
       - name: build windows app
         run: |
           yarn electron:build
+        env:
+          GH_TOKEN: ${{ secrets.GIT_TOKEN }}
+
       # step5: cleanup artifacts in dist_electron
       - name: cleanup artifacts
         run: |
-          npx rimraf "dist_electron/!(*.exe|*.dmg)"
+          npx rimraf "dist_electron/!(*.exe)"
 
       # step6: upload artifacts
       - name: upload artifacts
