@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <img @click.right="hide" class="bg" src="https://shenzilong.cn/util/redirect_to_bing_daily_picture_address?" alt />
+    <div @click.right="hide" class="c-bg">
+      <img class="c-bg-img" src="https://shenzilong.cn/util/redirect_to_bing_daily_picture_address?" alt />
+    </div>
     <div v-show="countdown" class="c-center" :style="{ '--t': countdown }">
       <div>
         <div>编程防沉迷系统</div>
@@ -21,7 +23,11 @@
     width: 100vw;
     height: 100vh;
   }
-  .bg {
+  .c-bg {
+    width: 100%;
+    height: 100%;
+  }
+  .c-bg-img {
     width: 100%;
     height: 100%;
     object-fit: cover;

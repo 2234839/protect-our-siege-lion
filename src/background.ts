@@ -25,15 +25,17 @@ function createWindow() {
     frame: isDevelopment,
   });
   win.hide();
+  const winShow = () => {
+    win!.show();
 
-  win.on("show", () => {
     win.setFullScreen(true);
     win.webContents.send(Event_Name.main_show_window, "show");
     if (!isDevelopment) {
       /** 正式使用要一直在顶部 */
       win.setAlwaysOnTop(true);
     }
-  });
+  };
+  win.on("show", winShow);
 
   if (isDevelopment) {
     win.webContents.openDevTools();
@@ -54,7 +56,7 @@ function createWindow() {
   setInterval(() => {
     time = Date.now();
     logger.info("打开窗口");
-    win!.show();
+    winShow();
   }, interval_time);
 }
 
@@ -67,7 +69,8 @@ app.on("window-all-closed", () => {
   }
 });
 
-const interval_time = 1000 * 60 * 15;
+/** 间隔多少时间弹窗一次 */
+const interval_time = 60 * 15 * 1000;
 
 let time = Date.now();
 app.on("ready", async () => {
