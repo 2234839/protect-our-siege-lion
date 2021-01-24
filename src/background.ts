@@ -1,7 +1,20 @@
 "use strict";
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Notification, protocol, screen, Tray } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  nativeImage,
+  Notification,
+  protocol,
+  screen,
+  Tray,
+} from "electron";
 import path from "path";
-import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
+import {
+  createProtocol,
+  installVueDevtools,
+} from "vue-cli-plugin-electron-builder/lib";
 import { Event_Name } from "./EventName";
 import { Log } from "./util/log";
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -12,7 +25,9 @@ const logger = new Log();
 let win: BrowserWindow;
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { secure: true, standard: true } },
+]);
 
 function createWindow() {
   logger.info("开始运行");
@@ -27,15 +42,19 @@ function createWindow() {
   win.hide();
   const winShow = () => {
     win!.show();
-
+    fullAndTop();
+  };
+  const fullAndTop = () => {
     win.setFullScreen(true);
     win.webContents.send(Event_Name.main_show_window, "show");
     if (!isDevelopment) {
       /** 正式使用要一直在顶部 */
-      win.setAlwaysOnTop(true);
+      win.setAlwaysOnTop(true, "screen-saver");
+      win.moveTop();
+      win.center();
     }
   };
-  win.on("show", winShow);
+  win.on("show", fullAndTop);
 
   if (isDevelopment) {
     win.webContents.openDevTools();
@@ -75,17 +94,22 @@ const interval_time = 60 * 15 * 1000;
 let time = Date.now();
 app.on("ready", async () => {
   /** 托盘图标 */
-  let tray = new Tray(nativeImage.createFromPath(path.join(__static, "/ico.jpg")));
+  let tray = new Tray(
+    nativeImage.createFromPath(path.join(__static, "/ico.jpg")),
+  );
 
   setInterval(() => {
     /** 更新剩余时间提示 */
     if (tray === null) return;
-    tray.setToolTip(`还有 ${(interval_time - (Date.now() - time)) / 1000}s 后提醒`);
+    tray.setToolTip(
+      `还有 ${(interval_time - (Date.now() - time)) / 1000}s 后提醒`,
+    );
   }, 1000);
 
   tray.on("click", () => {
     win!.show();
   });
+
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
