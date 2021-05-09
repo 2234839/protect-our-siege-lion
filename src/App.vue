@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <div @click.right="hide" class="c-bg">
-      <img class="c-bg-img" src="https://shenzilong.cn/util/redirect_to_bing_daily_picture_address?" alt />
+      <img
+        class="c-bg-img"
+        src="https://shenzilong.cn/util/redirect_to_bing_daily_picture_address"
+        alt
+      />
     </div>
     <div v-show="countdown" class="c-center" :style="{ '--t': countdown }">
       <div>
@@ -44,10 +48,10 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    width: calc(100% - calc(15% - 1% * var(--t)) * 2);
-    height: calc(100% - calc(15% - 1% * var(--t)) * 2);
-
-    transition: all 0.3s;
+    /* width: calc(100% - calc(15% - 1% * var(--t)) * 2);
+    height: calc(100% - calc(15% - 1% * var(--t)) * 2); */
+    width: 100%;
+    height: 100%;
 
     display: flex;
     justify-content: center;
@@ -60,7 +64,8 @@
   }
   @font-face {
     font-family: "timeText";
-    src: url("//fr.wanw.xin/font/generate_fonts_dynamically.ttf?font=优设标题黑&text=0123456789") format("truetype");
+    src: url("//fr.wanw.xin/font/generate_fonts_dynamically.ttf?font=优设标题黑&text=0123456789")
+      format("truetype");
     font-style: normal;
     font-weight: normal;
   }

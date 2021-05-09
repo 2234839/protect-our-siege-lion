@@ -21,7 +21,7 @@ export default defineComponent({
 
     const countdown = computed(() => {
       const s = Math.floor((currentTime.value - showTime.value) / 1000);
-      const t = 15 - s;
+      const t = 25 - s;
       if (t < 0) {
         return 0;
       }
